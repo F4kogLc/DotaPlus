@@ -1,6 +1,7 @@
 #pragma once
 #include <Windows.h>
 #include <iostream>
+#include "log.h"
 
 void SwitchCommand(int USER_INPUT);
 void DrawMenu();

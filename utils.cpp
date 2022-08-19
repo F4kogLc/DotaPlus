@@ -1,11 +1,11 @@
-#include "main.h"
 #include <fstream>
 #include <regex>
+#include "main.h"
 
 bool Utils::get_dota_path_from_reg(std::string* path) {
     HKEY h_key{};
     if (int error = RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\Classes\\dota2\\Shell\\Open\\Command", 0, KEY_QUERY_VALUE, &h_key) != ERROR_SUCCESS) {
-        std::cout << "[-] Registry Read Failed at RegOpenKey, Error: " << error << std::endl;
+        LogError("Registry Read Failed at RegOpenKey, Error: %d\n", error)
         RegCloseKey(h_key);
         return false;
     }
@@ -15,7 +15,7 @@ bool Utils::get_dota_path_from_reg(std::string* path) {
     DWORD dota_path_size = sizeof(dota_path_reg) - sizeof(char);
 
     if (int error = RegQueryValueExA(h_key, nullptr, nullptr, nullptr, (LPBYTE)(dota_path_reg + 1), &dota_path_size) != ERROR_SUCCESS) {
-        std::cout << "[-] Registry Read Failed at RegQueryValue, Error: " << error << std::endl;
+        LogError("Registry Read Failed at RegQueryValue, Error: %d\n", error)
         RegCloseKey(h_key);
         return false;
     }
@@ -36,7 +36,7 @@ bool Utils::get_dota_path(std::string* path) {
     std::smatch matches;
 
     if (!std::regex_search(dota_path, matches, rgx)) {
-        std::cout << "[-] Failed to parse Dota path!" << std::endl;
+        LogError("Failed to parse Dota path!\n")
         return false;
     }
 
@@ -69,7 +69,7 @@ bool Utils::get_byte_array(std::string file_path, char** ret_array, int* file_si
     std::ifstream file(file_path, std::ios::binary | std::ios::ate);
     int file_length = static_cast<int>(file.tellg());
     if (file_length == 0) {
-        std::cout << "[-] File Size is NULL!" << std::endl;
+        LogError("File Size is NULL!\n")
         return false;
     }
 
@@ -119,7 +119,7 @@ bool Utils::patch_dota_plus(bool revert) {
 
     int dota_plus_patch_offset = Utils::find_offset(client_path, Globals::dota_plus_pattern, sizeof(Globals::dota_plus_pattern));
     if (!dota_plus_patch_offset) {
-        std::cout << "[-] Dota Plus Unlock Offset is NULL!" << std::endl;
+        LogError("Dota Plus Unlock Offset is NULL!\n")
         return false;
     }
 

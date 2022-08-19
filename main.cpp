@@ -1,15 +1,14 @@
 ﻿#include "main.h"
-#include <string>
 
 void SwitchCommand(int USER_INPUT) {
 	switch (USER_INPUT) {
 	case 1:
 		if (Utils::patch_dota_plus(false))
-			std::cout << "[+] Dota Plus Unlocked" << std::endl;
+			LogSuccess("Dota Plus Unlocked\n")
 		break;
 	case 2:
 		if (Utils::patch_dota_plus(true))
-			std::cout << "[+] Dota Plus Reverted" << std::endl;
+			LogSuccess("Dota Plus Reverted\n")
 		break;
 	default:
 		DrawMenu();
@@ -18,9 +17,9 @@ void SwitchCommand(int USER_INPUT) {
 }
 
 void DrawMenu() {
-	std::cout << "[1] Unlock Dota Plus" << std::endl;
-	std::cout << "[2] Lock Dota Plus" << std::endl;
-	std::cout << "\n>>> ";
+	Log("[1] Unlock Dota Plus\n")
+	Log("[2] Revert Dota Plus\n")
+	Log("\n>>> ")
 
 	int USER_INPUT;
 	std::cin >> USER_INPUT;
